@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask SSTI Challenge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Secret Messaging Service</h1>
+        <p style="text-align: center;">This is a secure messaging service, where you can leave messages for our community.</p>
+        <div class="actions">
+            <a href="{{ url_for('message') }}" class="btn">Leave a Message</a>
+        </div>
+    </div>
+</body>
+</html> 

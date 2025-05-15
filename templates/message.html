@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Message - SSTI Challenge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Message</h1>
+        
+        <!-- This is vulnerable to SSTI - renders template string directly -->
+        {{ template | safe }}
+        
+        <div class="footer">
+            <a href="{{ url_for('index') }}">Back to Home</a> | 
+            <a href="{{ url_for('message') }}">Send Another Message</a>
+        </div>
+    </div>
+</body>
+</html> 
