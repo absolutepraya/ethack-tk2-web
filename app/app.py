@@ -13,7 +13,6 @@ app.secret_key = os.urandom(24)
 
 FLAG = "ETHACK{es_es_ti_ai_ahayahay}"
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -53,13 +52,6 @@ def message():
 </html>"""
         return render_template_string(full_template)
     return render_template("message_form.html")
-
-
-@app.route("/admin")
-def admin():
-    # Pretend admin page where the flag is "hidden"
-    # Players need to use SSTI to access this
-    return f"Admin Panel. The flag is: {FLAG}"
 
 
 if __name__ == "__main__":
