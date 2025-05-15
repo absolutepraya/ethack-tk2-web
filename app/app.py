@@ -23,6 +23,13 @@ def index():
 def message():
     if request.method == "POST":
         name = request.form.get("name", "")
+        if "." in name:
+            return (
+                render_template_string(
+                    "<h1>Invalid input: the dot character is not allowed.</h1>"
+                ),
+                400,
+            )
         snippet = f"""<div class="message">
     <h2>Hello, {name}!</h2>
     <p>Thank you for visiting our website.</p>
